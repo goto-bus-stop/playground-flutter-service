@@ -16,6 +16,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="playground_flutter_service"
         android:icon="@mipmap/ic_launcher">
+        <service android:name=".PlaygroundService" android:label="That'sa service!"></service>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
