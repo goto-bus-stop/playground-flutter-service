@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() => runApp(new MyApp());
 
 final channel = MethodChannel('example');
-final events = EventChannel('events');
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -48,15 +48,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  StreamSubscription<dynamic> _sub;
 
   @override
   void initState() {
     super.initState();
 
+    print('initState');
+
     channel.invokeMethod('', null);
-    events.receiveBroadcastStream().listen((value) {
+    _sub = EventChannel('events').receiveBroadcastStream().listen((value) {
+      print('receiveBroadcastStream.listen');
       setState(() { _counter = value as int; });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('dispose');
+    if (_sub != null) {
+      print('cancel');
+      _sub.cancel();
+      _sub = null;
+    }
   }
 
   void _incrementCounter() {
